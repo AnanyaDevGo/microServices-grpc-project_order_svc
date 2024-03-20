@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/AnanyaDevGo/microServices-grpc-project_order_svc/pkg/models"
@@ -9,17 +10,18 @@ import (
 )
 
 type Handler struct {
-    DB *gorm.DB
+	DB *gorm.DB
 }
 
-func Init(url string) Handler {
-    db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
+func Init(dbHost, dbPort, dbUser, dbPassword, dbName string) Handler {
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPassword, dbName)
 
-    if err != nil {
-        log.Fatalln(err)
-    }
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-    db.AutoMigrate(&models.Order{})
+	db.AutoMigrate(&models.Order{})
 
-    return Handler{db}
+	return Handler{db}
 }

@@ -19,8 +19,7 @@ func main() {
     if err != nil {
         log.Fatalln("Failed at config", err)
     }
-
-    h := db.Init(c.DBUrl)
+    h := db.Init(c.DBHost, c.DBPort, c.DBUser, c.DBPassword, c.DBName)
 
     lis, err := net.Listen("tcp", c.Port)
 
